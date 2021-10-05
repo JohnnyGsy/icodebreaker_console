@@ -14,4 +14,6 @@ gem 'icodebreaker_gem'
 
 gem 'rspec'
 
+gem 'terminal-table'
+
 gem 'i18n'

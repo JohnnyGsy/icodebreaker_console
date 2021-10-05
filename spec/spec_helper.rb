@@ -1,8 +1,8 @@
 # frozen_string_literal: true
+
 require 'simplecov'
 SimpleCov.start
-require './icodebreaker_console/config'
-
+require './config'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
