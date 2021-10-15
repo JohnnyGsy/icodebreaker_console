@@ -6,13 +6,16 @@ class Ui
   include UiSupport
 
   def run
+    puts I18n.t('game.introdaction_message')
+    $stdin.getch
+    system('clear')
     loop do
       puts I18n.t('game.menu')
       case UiSupport.user_input
       when I18n.t('command.start') then start
       when I18n.t('command.rules') then puts I18n.t('game.rules')
       when I18n.t('command.statistics') then UiSupport.statistics
-      when I18n.t('command.exit') then exit
+      when I18n.t('command.exit') then abort I18n.t('game.goodbye_message')
       else puts I18n.t('command.error_command') end
     end
   end
@@ -29,29 +32,22 @@ class Ui
   end
 
   def name_enter
-    loop do
-      name = UiSupport.name_question
-      begin
-        @codebreaker.validate_name(name)
-        @codebreaker.name = name
-        break
-      rescue ArgumentError
-        puts I18n.t('game.name_length_error')
-      end
+    name = UiSupport.name_question
+    if @codebreaker.validate_name(name)
+      @codebreaker.name = name
+    else
+      puts I18n.t('game.name_length_error')
+      name_enter
     end
   end
 
   def difficulty_enter
-    loop do
-      difficulty = UiSupport.difficulty_question.to_sym
-
-      begin
-        @codebreaker.validate_difficulty(difficulty)
-        @codebreaker.difficulty = difficulty
-        break
-      rescue StandardError
-        puts I18n.t('game.difficulty_input_error')
-      end
+    difficulty = UiSupport.difficulty_question.to_sym
+    if @codebreaker.validate_difficulty(difficulty)
+      @codebreaker.difficulty = difficulty
+    else
+      puts I18n.t('game.difficulty_input_error')
+      difficulty_enter
     end
   end
 
@@ -61,23 +57,22 @@ class Ui
   end
 
   def process?
-    case guess = UiSupport.process_question
+    case guess = UiSupport.process_question(@codebreaker)
     when I18n.t('command.exit') then exit
     when I18n.t('command.hint')
       hint
       false
-    else
-      return false unless attempt_guess(guess).eql?('++++')
-
-      win
-      true
-    end
+    else attempt_guess(guess) end
   end
 
   def win
+    puts @codebreaker.code.secret
     puts I18n.t('game.win')
-    if UiSupport.save_result_question == I18n.t('command.agree')
-      IcodebreakerGem::Storage.save_storage(@codebreaker.game_data)
+    loop do
+      case UiSupport.user_input
+      when I18n.t('command.save') then IcodebreakerGem::Storage.save_storage(@codebreaker.game_data) && new_game
+      when I18n.t('command.exit') then abort I18n.t('game.goodbye_message')
+      else puts I18n.t('command.error_command') end
     end
   end
 
@@ -86,25 +81,34 @@ class Ui
   end
 
   def attempt_guess(guess)
-    entered_guess = guess
-    loop do
-      @codebreaker.validate_code(entered_guess)
+    if @codebreaker.validate_code(guess)
+
       puts @codebreaker.attempt(guess)
-      break
-    rescue ArgumentError
+      return unless @codebreaker.result == :win
+
+      win
+    else
       puts I18n.t('game.guess_input_error')
-      entered_guess = UiSupport.guess_question
+      process?
     end
   end
 
   def defeat?
-    return false if @codebreaker.result != :lose
+    return if @codebreaker.result != :lose
 
-    puts @codebreaker.code
+    system('clear')
+    puts I18n.t('game.lose')
+    puts @codebreaker.code.secret
     true
   end
 
   def new_game
-    start if UiSupport.new_game_question == I18n.t('command.agree')
+    puts I18n.t('game.new_game')
+    loop do
+      case UiSupport.user_input
+      when I18n.t('command.new') then start
+      when I18n.t('command.exit') then abort I18n.t('game.goodbye_message')
+      else puts I18n.t('command.error_command') end
+    end
   end
 end

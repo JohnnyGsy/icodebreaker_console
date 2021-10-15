@@ -5,5 +5,5 @@ require 'terminal-table'
 require 'i18n'
 require './icodebreaker_console/ui_support'
 require './icodebreaker_console/ui'
-
+require 'io/console'
 I18n.load_path << Dir[['config', 'locales', '**', '*.yml'].join('/')]

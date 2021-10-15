@@ -1,4 +1,7 @@
 en:
+  message:
+    lose: "The game is over."
+    no_hints: "No hints left."
   command:
     start: "start"
     rules: "rules"
@@ -7,11 +10,18 @@ en:
     hint: "hint"
     error_command: "That's not a valid key. Try again!"
     agree: "y"
+    save: "save"
+    new: "new"
   registration:
     name: "Enter name:\n"
   game:
+    goodbye_message: "See you next time!"
+    introdaction_message: |
+      Welcome to Codebreaker game!
+      Press any key to enter main menu...
     guess: "Enter guess:\n"
     process: |
+      %{attempts} attempts left and %{hints} hints left
       Input:
         "4 digits in range 1-6" ->to make a guess
         hint ->to take a hint
@@ -20,16 +30,19 @@ en:
     name_length_error: "The name must be between 3 and 20 characters long.\n"
     difficulty_input_error: "This difficulty is not available.Please choose easy, medium or hell.\n"
     no_hints: 'You have no hints'
-    lose: "Secret code: %{secret_code}\nYou lose!\n"
-    win: "You win!\n"
-    save_result: "Save results? (y/n):\n"
-    new_game: "Start a new game? (y/n):\n"
+    lose: "You lose!"
+    win:  |
+      You win!
+      save -> to save your results
+      exit  ->for exit from console
+    new_game:  |
+      new -> to start new game
+      exit  ->for exit from console
     difficulty:  |
       Enter difficulty:
           easy -> 15 attempts. 2 hints
           medium -> 10 attempts. 1 hint
           hell -> 5 attempts. 1 hint
-
     menu: |
       Input:
         start ->for start game

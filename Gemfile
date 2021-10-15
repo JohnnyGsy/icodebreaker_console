@@ -8,12 +8,13 @@ gem 'rubocop', require: false
 
 gem 'fasterer'
 
-gem 'simplecov'
+group :development do
+  gem 'i18n'
+  gem 'icodebreaker_gem'
+  gem 'terminal-table'
+end
 
-gem 'icodebreaker_gem'
-
-gem 'rspec'
-
-gem 'terminal-table'
-
-gem 'i18n'
+group :test do
+  gem 'rspec'
+  gem 'simplecov'
+end

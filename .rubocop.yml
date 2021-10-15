@@ -1,5 +1,21 @@
+AllCops:
+  NewCops: enable
 
-Metrics/BlockLength:
+  Metrics/BlockLength:
   Exclude:
     - 'Gemfile'
     - 'spec/**/*.rb'
+
+Style/Documentation: 
+  Exclude:
+    - 'icodebreaker_console/ui.rb'
+    - 'icodebreaker_console/ui_support.rb'
+
+Metrics/AbcSize:
+  Exclude:
+    - 'icodebreaker_console/ui.rb'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'icodebreaker_console/ui.rb'
+
